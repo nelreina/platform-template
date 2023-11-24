@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  auth-simple:
+    build:
+      context: ./auth-simple
+      dockerfile: Dockerfile.dev
+    command: ["npm", "run", "dev", "--", "--host"]
+    container_name: auth-simple
+    volumes:
+      - ./auth-simple/src:/appsrc/src
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.auth-simple.rule=Host("skp.auth-simple.localhost")
+    env_file:
+      - ./.env
+
+networks:
+  default:
+    name: traefik
+    external: true

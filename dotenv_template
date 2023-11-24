@@ -1,0 +1,11 @@
+PUBLIC_POCKETBASE_URL=http://localhost:8090
+PUBLIC_BACKGROUND_IMAGE='https://images.unsplash.com/photo-1554232456-8727aae0cfa4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+# PUBLIC_BACKGROUND_IMAGE='https://images.unsplash.com/photo-1488229297570-58520851e868?q=80&w=1469&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+
+# Session Exipred in 8 hours
+SESSION_EXPIRED=28800
+
+# OTP_ENABLED=true
+OTP_APP_NAME=NELREINATECH
+
+OTP_SESSSION_EXPIRED=60
