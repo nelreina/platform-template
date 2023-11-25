@@ -6,7 +6,8 @@ import { getSessionUser } from './lib/server/sessions';
 import { checkOtp } from './lib/server/otp';
 
 export const handle = async ({ event, resolve }) => {
-	const user = await getSessionUser(event.cookies);
+	const session = await getSessionUser(event.cookies);
+	const { user, token } = session || {};
 	event.locals.user = user;
 
 	if (
@@ -17,15 +18,10 @@ export const handle = async ({ event, resolve }) => {
 		if (!user) {
 			throw redirect(303, `${base}/login`);
 		} else {
-			await checkOtp(user);
+			await checkOtp(user, token, event);
 		}
 	}
 
 	const response = await resolve(event);
-
-	// response.headers = {
-	//   ...response.headers,
-	//   'Access-Control-Allow-Origin': '*'
-	// };
 	return response;
 };

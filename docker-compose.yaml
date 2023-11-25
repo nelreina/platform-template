@@ -7,6 +7,10 @@ services:
       dockerfile: Dockerfile.dev
     command: ["npm", "run", "dev", "--", "--host"]
     container_name: auth-simple
+    environment:
+      # - OTP_ENABLED=true
+      - OTP_APP_NAME=NELREINATECH
+      - OTP_SESSION_EXPIRED=3600
     volumes:
       - ./auth-simple/src:/appsrc/src
     labels:

@@ -5,6 +5,10 @@
 </script>
 
 <div class="card variant-glass-tertiary p-10 rounded-md shadow-md w-full sm:w-96 space-y-5">
+	<div class="flex justify-center">
+		<img src="logo.png" alt="" class="w-44 h-44 rounded" />
+	</div>
+
 	<h2 class="text-4xl font-semibold mb-6 text-center text-tertiary-200">Enter Credentials</h2>
 
 	{#if form?.error}

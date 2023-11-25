@@ -3,7 +3,8 @@
 	import { base } from '$app/paths';
 </script>
 
-<div class="card variant-ghost-tertiary space-y-10 p-5 text-center flex flex-col items-center">
+<div class="card variant-glass-tertiary space-y-10 p-5 text-center flex flex-col items-center">
+	<img src="logo.png" alt="" class="w-64 h-64 rounded" />
 	{#if data.user}
 		<h2 class="h2">Welcome back {data.user.username} to Auth Simple App.</h2>
 		<div class="flex justify-center space-x-2">

@@ -1,41 +1,55 @@
-import { redirect, fail } from '@sveltejs/kit';
+import { redirect } from 'sveltekit-flash-message/server';
 import { createSession } from '$lib/server/sessions';
 import { base } from '$app/paths';
+import { pbAdmin } from '$lib/server/pb-admin';
+import logger from '$lib/server/logger';
+import { fail } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageServerLoad} */
-export async function load({ locals }) {
-	if (locals.user) throw redirect(303, `${base}/app/dashboard`);
+export async function load(event) {
+	if (event.locals.user)
+		throw tredirect(
+			303,
+			`${base}/app/dashboard`,
+			{ message: 'Already Logged in!', type: 'success' },
+			event
+		);
 	return {};
 }
 
 /** @type {import('./$types').Actions} */
 export const actions = {
-	default: async ({ request, cookies }) => {
+	default: async (event) => {
 		// Get form data
+		const { request, cookies } = event;
 		const formData = await request.formData();
-		const entries = Object.fromEntries(formData);
-		// useranem and password are required
-		if (!entries.username || !entries.password) {
+		const entry = Object.fromEntries(formData);
+		if (!entry.username || !entry.password) {
 			return fail(400, {
 				error: 'Username and Password are required!',
-				username: entries.username
+				username: entry.username
 			});
 		}
-		// fake login
-		if (entries.username !== 'admin' || entries.password !== 'polka123')
-			return fail(400, { error: 'Username or Password incorrect!', username: entries.username });
+
+		const { username, password } = entry;
+		// Login the user
+		try {
+			logger.info(`🔑 Authenticating ${entry.username} ...`);
+			const user = await pbAdmin.collection('users').authWithPassword(username, password);
+			const authData = user.record;
+			await createSession(authData, cookies);
+			logger.info(`✅ User authenticated: ${entry.username}`);
+		} catch (error) {
+			logger.error(`❗️ User authentication failed: ${entry.username}`);
+			return fail(400, {
+				error: error.message,
+				username: entry.username
+			});
+		}
 
 		// Generate random token
-		await createSession(
-			{
-				id: 1,
-				username: entries.username,
-				role: 'ADMIN',
-				otp: false,
-				email: 'admin@nelreina.tech'
-			},
-			cookies
-		);
-		throw redirect(303, `${base}/app/dashboard`);
+
+		const message = { type: 'success', message: 'Sign in successful!' };
+		throw redirect(303, `${base}/app/dashboard`, message, event);
 	}
 };

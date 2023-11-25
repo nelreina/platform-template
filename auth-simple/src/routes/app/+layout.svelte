@@ -1,6 +1,6 @@
 <script>
 	import '../../app.postcss';
-	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
+	import { AppShell, AppBar, Toast } from '@skeletonlabs/skeleton';
 	import { base } from '$app/paths';
 
 	export let data;
@@ -10,13 +10,17 @@
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 </script>
 
+<Toast />
+
 <!-- App Shell -->
 <AppShell>
 	<svelte:fragment slot="header">
 		<!-- App Bar -->
 		<AppBar>
 			<svelte:fragment slot="lead">
-				<a href={base}>
+				<a href={base} class="flex items-center gap-3">
+					<img src="/logo.png" alt="" class="w-12 h-12 rounded" />
+
 					<strong class="text-xl uppercase"> Auth simple </strong>
 				</a>
 			</svelte:fragment>
@@ -24,7 +28,7 @@
 				<a class="btn btn-sm variant-ghost-surface" href="{base}/app/dashboard"> Dashboard </a>
 				<a class="btn btn-sm variant-ghost-surface" href="{base}/app/protected"> Protected </a>
 				<a class="btn btn-sm variant-ghost-tertiary" href="{base}/app/profile">
-					{data.user?.username}
+					{data.user?.name}
 				</a>
 			</svelte:fragment>
 		</AppBar>

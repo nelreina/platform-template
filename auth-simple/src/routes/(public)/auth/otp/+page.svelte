@@ -1,5 +1,22 @@
 <script>
 	export let form;
+
+	import { getToastStore } from '@skeletonlabs/skeleton';
+	import { getFlash } from 'sveltekit-flash-message';
+	import { page } from '$app/stores';
+
+	const flash = getFlash(page);
+	const toastStore = getToastStore();
+
+	$: {
+		if ($flash) {
+			toastStore.trigger({
+				message: $flash.message,
+				timeout: 10000,
+				background: 'variant-ringed-error'
+			});
+		}
+	}
 </script>
 
 <div class="card p-10 variant-glass-tertiary">

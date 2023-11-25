@@ -55,5 +55,5 @@ export const getSessionUser = async (cookies) => {
 		await deleteSession(cookies);
 		return;
 	}
-	return JSON.parse(user);
+	return { token, user: JSON.parse(user) };
 };
