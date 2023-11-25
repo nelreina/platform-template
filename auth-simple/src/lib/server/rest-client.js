@@ -1,12 +1,16 @@
 import RestClient from '@nelreina/rest-client';
 import 'dotenv/config';
 
-const TRANS_API = process.env['TRANS_API'];
-// const API_TOKEN = process.env['API_TOKEN'];
+const TRANSLATION_API = process.env['TRANSLATION_API'];
+const TRANSLATION_ENABLED = process.env['TRANSLATION_ENABLED'];
+
 const SERVICE_NAME = process.env['SERVICE_NAME'];
-const transApi = new RestClient(TRANS_API);
+const transApi = new RestClient(TRANSLATION_API);
 
 export const getTranslations = async (lang) => {
+	if (!TRANSLATION_ENABLED) {
+		return {};
+	}
 	const translations = await transApi.get(`/api/translation/${SERVICE_NAME}/${lang}`);
 	return translations;
 };
