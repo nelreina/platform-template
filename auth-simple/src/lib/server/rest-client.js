@@ -8,7 +8,7 @@ const SERVICE_NAME = process.env['SERVICE_NAME'];
 const transApi = new RestClient(TRANSLATION_API);
 
 export const getTranslations = async (lang) => {
-	if (!TRANSLATION_ENABLED) {
+	if (!TRANSLATION_ENABLED === 'true') {
 		return {};
 	}
 	const translations = await transApi.get(`/api/translation/${SERVICE_NAME}/${lang}`);
