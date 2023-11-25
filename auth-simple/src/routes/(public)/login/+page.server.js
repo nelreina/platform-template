@@ -8,7 +8,7 @@ import { fail } from '@sveltejs/kit';
 /** @type {import('./$types').PageServerLoad} */
 export async function load(event) {
 	if (event.locals.user)
-		throw tredirect(
+		throw redirect(
 			303,
 			`${base}/app/dashboard`,
 			{ message: 'Already Logged in!', type: 'success' },

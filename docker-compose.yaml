@@ -8,7 +8,9 @@ services:
     command: ["npm", "run", "dev", "--", "--host"]
     container_name: auth-simple
     environment:
-      # - OTP_ENABLED=true
+      - NODE_ENV=development
+      - SERVICE_NAME=auth-simple
+      - OTP_ENABLED=false
       - OTP_APP_NAME=NELREINATECH
       - OTP_SESSION_EXPIRED=3600
     volumes:
