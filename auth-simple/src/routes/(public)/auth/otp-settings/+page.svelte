@@ -1,6 +1,9 @@
 <script>
 	export let data;
 	export let form;
+	import { enhance } from '$app/forms';
+
+	const browserSessionToken = data.browserSessionToken;
 </script>
 
 <div class="card p-10 variant-glass-tertiary">
@@ -17,7 +20,8 @@
 				</div>
 			</div>
 		{/if}
-		<form action="" method="post">
+		<form action="" method="post" use:enhance>
+			<input type="hidden" name="browserSessionToken" value={browserSessionToken} />
 			<input type="hidden" name="page" value="otp-settings" />
 			<!-- svelte-ignore a11y-autofocus -->
 			<input

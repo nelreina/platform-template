@@ -1,4 +1,3 @@
-import { redirect } from '@sveltejs/kit';
 import { generateQrCode, checkAuthCode } from '$lib/server/otp.js';
 
 const OTP_APP_NAME = process.env['OTP_APP_NAME'];

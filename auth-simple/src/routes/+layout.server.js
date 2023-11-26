@@ -2,7 +2,10 @@
 import { loadFlash } from 'sveltekit-flash-message/server';
 
 export const load = loadFlash(async ({ locals }) => {
-	const browserSessionToken = crypto.randomUUID();
+	let browserSessionToken = crypto.randomUUID();
+	if (locals.user) {
+		browserSessionToken = locals.user.browserSessionToken || browserSessionToken;
+	}
 	return {
 		browserSessionToken,
 		...locals

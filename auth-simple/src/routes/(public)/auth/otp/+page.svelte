@@ -1,6 +1,8 @@
 <script>
 	export let form;
-
+	export let data;
+	const browserSessionToken = data.browserSessionToken;
+	import { enhance } from '$app/forms';
 	import { getToastStore } from '@skeletonlabs/skeleton';
 	import { getFlash } from 'sveltekit-flash-message';
 	import { page } from '$app/stores';
@@ -29,7 +31,9 @@
 				</div>
 			</div>
 		{/if}
-		<form action="" method="post">
+		<form action="" method="post" use:enhance>
+			<input type="hidden" name="browserSessionToken" value={browserSessionToken} />
+
 			<!-- svelte-ignore a11y-autofocus -->
 			<input
 				class="input"

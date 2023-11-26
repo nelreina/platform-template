@@ -11,7 +11,7 @@ const REDIS_PORT = process.env['REDIS_PORT'] || 6379;
 const REDIS_USER = process.env['REDIS_USER'];
 const REDIS_PW = process.env['REDIS_PW'];
 const STREAM = process.env['STREAM'];
-const SERVICE = process.env['SERVICE'] || 'sveltekit';
+const SERVICE = process.env['SERVICE_NAME'] || 'unknown';
 
 if (REDIS_HOST) {
 	url = 'redis://';
@@ -38,7 +38,7 @@ export const addToStream = async (event, aggregateId, payload) => {
 		streamKeyName: STREAM,
 		aggregateId,
 		payload,
-		event,
+		event: `${SERVICE}:${event}`,
 		serviceName: SERVICE
 	};
 	await addToEventLog(client, streamData);

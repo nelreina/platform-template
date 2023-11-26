@@ -3,7 +3,9 @@
 	import { enhance } from '$app/forms';
 	export let form;
 	import { i18n } from '$lib/stores/i18next.js';
-	import { base } from '$app/paths';
+	export let data;
+	const browserSessionToken = data.browserSessionToken;
+	// import { base } from '$app/paths'
 </script>
 
 <div class="card variant-glass-tertiary p-10 rounded-md shadow-md w-full sm:w-96 space-y-5">
@@ -27,6 +29,7 @@
 
 	<form method="post" use:enhance>
 		<div class="mb-4">
+			<input type="hidden" name="browserSessionToken" value={browserSessionToken} />
 			<input
 				type="text"
 				id="username"

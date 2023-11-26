@@ -4,6 +4,7 @@ import { base } from '$app/paths';
 import { pbAdmin } from '$lib/server/pb-admin';
 import logger from '$lib/server/logger';
 import { fail } from '@sveltejs/kit';
+import { addToStream } from '$lib/server/redis-client.js';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load(event) {
@@ -24,9 +25,15 @@ export const actions = {
 		const { request, cookies } = event;
 		const formData = await request.formData();
 		const entry = Object.fromEntries(formData);
+		const { browserSessionToken } = entry;
 		if (!entry.username || !entry.password) {
+			const error = 'Username and Password are required!';
+			addToStream('login-error', browserSessionToken, {
+				error,
+				username: entry.username
+			});
 			return fail(400, {
-				error: 'Username and Password are required!',
+				error,
 				username: entry.username
 			});
 		}
@@ -36,11 +43,18 @@ export const actions = {
 		try {
 			logger.info(`🔑 Authenticating ${entry.username} ...`);
 			const user = await pbAdmin.collection('users').authWithPassword(username, password);
-			const authData = user.record;
+			const authData = { ...user.record, token: user.token, browserSessionToken };
 			await createSession(authData, cookies);
+			addToStream('login-success', browserSessionToken, {
+				appUserId: authData.id
+			});
 			logger.info(`✅ User authenticated: ${entry.username}`);
 		} catch (error) {
 			logger.error(`❗️ User authentication failed: ${entry.username}`);
+			addToStream('login-error', browserSessionToken, {
+				error: error.message,
+				username: entry.username
+			});
 			return fail(400, {
 				error: error.message,
 				username: entry.username

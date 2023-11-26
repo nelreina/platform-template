@@ -1,5 +1,5 @@
-import { client as redis } from './redis-client.js';
-import { redirect } from '@sveltejs/kit';
+import { addToStream, client as redis } from './redis-client.js';
+import { redirect, fail } from '@sveltejs/kit';
 import { redirect as flash_redirect } from 'sveltekit-flash-message/server';
 
 import { authenticator } from 'otplib';
@@ -12,7 +12,6 @@ const OTP_APP_NAME = process.env['OTP_APP_NAME'];
 const OTP_SESSION_EXPIRED = process.env['OTP_SESSION_EXPIRED'];
 
 export const checkOtp = async (user, token, event) => {
-	event.locals.test = 'test';
 	if (OTP_ENABLED === 'true') {
 		if (await redis.exists(`user:${user.id}:otp-secret`)) {
 			// Check if user as
@@ -60,7 +59,7 @@ export const checkAuthCode = async ({ locals, request, cookies }) => {
 	const { user } = locals;
 	const token = getToken(cookies);
 	const data = Object.fromEntries(await request.formData());
-	const { authCode, page } = data;
+	const { authCode, page, browserSessionToken } = data;
 
 	const secret = await redis.get(`user:${user.id}:${page || 'otp-secret'}`);
 
@@ -70,10 +69,19 @@ export const checkAuthCode = async ({ locals, request, cookies }) => {
 		redis.set(`active:otp:session:${token}`, JSON.stringify({ ...user, otp: true }));
 		redis.expire(`active:otp:session:${token}`, OTP_SESSION_EXPIRED);
 		await saveSession(token, { ...user, otp: true });
+		addToStream('otp-success', browserSessionToken, {
+			appUserId: user.id,
+			page: page || 'otp-secret'
+		});
 		throw redirect(303, `${base}/app/dashboard`);
 	} else {
-		return {
+		addToStream('otp-error', browserSessionToken, {
+			error: 'Invalid code! Please try again.',
+			page: page || 'otp-secret',
+			appUserId: user.id
+		});
+		return fail(400, {
 			error: 'Invalid code! Please try again.'
-		};
+		});
 	}
 };
