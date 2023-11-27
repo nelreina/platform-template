@@ -35,7 +35,7 @@
 	</svelte:fragment>
 	<!-- Page Route Content -->
 	<div class="flex flex-col justify-center items-center">
-		<div class="w-full lg:w-4/5 xl:w-3/5 p-5">
+		<div class="w-full lg:w-4/5 xl:w-4/5 p-5">
 			<slot />
 		</div>
 	</div>
