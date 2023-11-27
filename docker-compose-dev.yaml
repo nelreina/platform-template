@@ -3,9 +3,12 @@ version: "3"
 services:
   srv-app-sessions:
     build: ./srv-app-sessions
+    command: ["node", "--watch-path=./src", "src/index"]
     restart: always
     environment:
       - SERVICE_NAME=srv-app-sessions
+    volumes:
+      - ./srv-app-sessions/src:/app/src
     container_name: srv-app-sessions
     env_file:
       - ./.env
@@ -13,23 +16,21 @@ services:
   auth-simple:
     build:
       context: ./auth-simple
-      dockerfile: Dockerfile
-      args:
-        - NODE_ENV=production
-        - PUBLIC_POCKETBASE_URL=${PUBLIC_POCKETBASE_URL}
-        - PUBLIC_BACKGROUND_IMAGE=${PUBLIC_BACKGROUND_IMAGE}
-    restart: always
+      dockerfile: Dockerfile.dev
+    command: ["npm", "run", "dev", "--", "--host"]
+    container_name: auth-simple
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
       - SERVICE_NAME=auth-simple
       - OTP_ENABLED=false
       - OTP_APP_NAME=NELREINATECH
       - OTP_SESSION_EXPIRED=3600
-
-    container_name: auth-simple
+    volumes:
+      - ./auth-simple/src:/appsrc/src
+      - ./auth-simple/static:/appsrc/static
     labels:
       - traefik.enable=true
-      - traefik.http.routers.auth-simple.rule=Host("app.auth-simple.localhost")
+      - traefik.http.routers.auth-simple.rule=Host("skp.auth-simple.localhost")
     env_file:
       - ./.env
 

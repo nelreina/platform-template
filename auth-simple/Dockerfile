@@ -5,6 +5,13 @@ WORKDIR /appsrc
 COPY package.json package-lock*.json ./
 RUN npm ci && npm cache clean --force
 COPY . ./
+
+ARG PUBLIC_POCKETBASE_URL
+ENV PUBLIC_POCKETBASE_URL=$PUBLIC_POCKETBASE_URL
+
+ARG PUBLIC_BACKGROUND_IMAGE
+ENV PUBLIC_BACKGROUND_IMAGE=$PUBLIC_BACKGROUND_IMAGE
+
 RUN npm run build
 RUN npm prune --production
 
