@@ -10,11 +10,12 @@ services:
     environment:
       - NODE_ENV=development
       - SERVICE_NAME=auth-simple
-      - OTP_ENABLED=false
+      - OTP_ENABLED=true
       - OTP_APP_NAME=NELREINATECH
       - OTP_SESSION_EXPIRED=3600
     volumes:
       - ./auth-simple/src:/appsrc/src
+      - ./auth-simple/static:/appsrc/static
     labels:
       - traefik.enable=true
       - traefik.http.routers.auth-simple.rule=Host("skp.auth-simple.localhost")
