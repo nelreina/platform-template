@@ -19,7 +19,7 @@
 		<AppBar>
 			<svelte:fragment slot="lead">
 				<a href={base} class="flex items-center gap-3">
-					<img src="/logo.png" alt="" class="w-12 h-12 rounded" />
+					<img src="{base}/logo.png" alt="" class="w-12 h-12 rounded" />
 
 					<strong class="text-xl uppercase"> Auth simple </strong>
 				</a>

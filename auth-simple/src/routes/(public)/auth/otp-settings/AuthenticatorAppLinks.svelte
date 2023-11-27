@@ -1,4 +1,6 @@
 <script>
+	import { base } from '$app/paths';
+
 	// export let style = "";
 </script>
 
@@ -12,7 +14,7 @@
 				rel="noopener noreferrer"
 				class="inline-block"
 			>
-				<img src="google-play.png" alt="Get it on Google Play" class="h-20" />
+				<img src="{base}/google-play.png" alt="Get it on Google Play" class="h-12" />
 			</a>
 
 			<!-- Microsoft Authenticator on the App Store -->
@@ -22,7 +24,7 @@
 				rel="noopener noreferrer"
 				class="inline-block"
 			>
-				<img src="apple-app-store.png" alt="Download on the App Store" />
+				<img src="{base}/apple-app-store.png" alt="Download on the App Store" class="h-12" />
 			</a>
 		</div>
 	</div>

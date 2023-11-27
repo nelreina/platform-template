@@ -6,7 +6,7 @@
 </script>
 
 <div class="card variant-glass-tertiary space-y-10 p-5 text-center flex flex-col items-center">
-	<img src="logo.png" alt="" class="w-64 h-64 rounded" />
+	<img src="{base}/logo.png" alt="" class="w-64 h-64 rounded" />
 	{#if data.user}
 		<h2 class="h2">
 			{$i18n.t('You are already logged in as:')}
