@@ -1,6 +1,18 @@
 version: "3"
 
 services:
+  srv-app-sessions:
+    build: ./srv-app-sessions
+    command: ["node", "--watch-path=./src", "src/index"]
+    restart: always
+    environment:
+      - SERVICE_NAME=srv-app-sessions
+    volumes:
+      - ./srv-app-sessions/src:/app/src
+    container_name: srv-app-sessions
+    env_file:
+      - ./.env
+
   auth-simple:
     build:
       context: ./auth-simple
