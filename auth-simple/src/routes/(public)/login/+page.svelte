@@ -11,7 +11,7 @@
 	// import { base } from '$app/paths'
 </script>
 
-<div class="card variant-glass-tertiary p-10 rounded-md shadow-md w-full sm:w-96 space-y-5">
+<div class="card variant-glass-surface p-10 rounded-md shadow-md w-full sm:w-96 space-y-5">
 	<div class="flex justify-center">
 		<a href="/">
 			<img src="{base}/logo.png" alt="" class="w-44 h-44 rounded" />

@@ -5,7 +5,7 @@
 	import LanguagesButtons from '$lib/components/LanguagesButtons.svelte';
 </script>
 
-<div class="card variant-glass-tertiary space-y-10 p-5 text-center flex flex-col items-center">
+<div class="card variant-glass-surface space-y-10 p-5 text-center flex flex-col items-center">
 	<img src="{base}/logo.png" alt="" class="w-64 h-64 rounded" />
 	{#if data.user}
 		<h2 class="h2">
