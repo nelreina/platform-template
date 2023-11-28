@@ -25,6 +25,7 @@ services:
       - OTP_ENABLED=false
       - OTP_APP_NAME=NELREINATECH
       - OTP_SESSION_EXPIRED=3600
+      - TRANSLATION_ENABLED=false
     volumes:
       - ./auth-simple/src:/appsrc/src
       - ./auth-simple/static:/appsrc/static

@@ -1,13 +1,11 @@
 <script>
+	import Profile from './Profile.svelte';
+
 	export let data;
 	const browserSessionToken = data.browserSessionToken;
+	const user = data.user;
 </script>
 
 <div>
-	<pre>{JSON.stringify(data, null, 2)}</pre>
-
-	<form action="" method="post">
-		<input type="hidden" name="browserSessionToken" value={browserSessionToken} />
-		<button class="btn variant-filled-primary"> Logout </button>
-	</form>
+	<Profile {user} {browserSessionToken} />
 </div>

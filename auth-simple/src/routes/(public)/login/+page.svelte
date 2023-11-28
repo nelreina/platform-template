@@ -4,6 +4,7 @@
 	export let form;
 	import { i18n } from '$lib/stores/i18next.js';
 	import { base } from '$app/paths';
+	import LanguagesButtons from '$lib/components/LanguagesButtons.svelte';
 
 	export let data;
 	const browserSessionToken = data.browserSessionToken;
@@ -28,7 +29,7 @@
 			</div>
 		</div>
 	{/if}
-
+	<LanguagesButtons />
 	<form method="post" use:enhance>
 		<div class="mb-4">
 			<input type="hidden" name="browserSessionToken" value={browserSessionToken} />

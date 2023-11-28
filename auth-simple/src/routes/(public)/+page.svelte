@@ -2,7 +2,7 @@
 	export let data;
 	import { base } from '$app/paths';
 	import { i18n } from '$lib/stores/i18next.js';
-	import LanguagesButtons from '../../lib/components/LanguagesButtons.svelte';
+	import LanguagesButtons from '$lib/components/LanguagesButtons.svelte';
 </script>
 
 <div class="card variant-glass-tertiary space-y-10 p-5 text-center flex flex-col items-center">
