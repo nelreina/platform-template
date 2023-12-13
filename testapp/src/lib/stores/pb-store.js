@@ -2,8 +2,7 @@ import { readable } from 'svelte/store';
 import { pb } from '$lib/pocketbase';
 import { browser } from '$app/environment';
 
-export const getPbRealtimeDataStore = (data, collection, user) => {
-	const recordId = 'id';
+export const getPbRealtimeDataStore = (data, collection, recordId = 'id') => {
 	if (!browser) {
 		return readable(data, () => {}); // noop
 	}
@@ -18,7 +17,6 @@ export const getPbRealtimeDataStore = (data, collection, user) => {
 
 	return readable(data, (set) => {
 		let sessions = data;
-		pb.authStore.save(user.token, user);
 		pb.collection(collection).subscribe('*', async (coll) => {
 			const { action, record } = coll;
 			switch (action) {
@@ -51,7 +49,6 @@ export const getPbRealtimeDataStore = (data, collection, user) => {
 		});
 		return () => {
 			pb.collection(collection).unsubscribe();
-			pb.authStore.clear();
 		}; // noop
 	});
 };

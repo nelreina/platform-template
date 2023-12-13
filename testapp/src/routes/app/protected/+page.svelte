@@ -1,15 +1,12 @@
 <script>
 	export let data;
-	const user = data.user;
 	const sessions = data.sessions;
 	import { getPbRealtimeDataStore } from '$lib/stores/pb-store';
 
-	let rt_sessions = getPbRealtimeDataStore(sessions, 'app_sessions', user);
+	let rt_sessions = getPbRealtimeDataStore(sessions, 'app_sessions');
 </script>
 
-<div class="flex">
-	<h1 class="text-3xl">App Sessions</h1>
-</div>
+<h1 class="text-3xl">App Sessions</h1>
 
 <!-- Responsive Container (recommended) -->
 <div class="table-container">
