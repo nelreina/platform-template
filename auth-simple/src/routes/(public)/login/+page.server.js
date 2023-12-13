@@ -5,6 +5,9 @@ import { pbAdmin } from '$lib/server/pb-admin';
 import logger from '$lib/server/logger';
 import { fail } from '@sveltejs/kit';
 import { addToStream } from '$lib/server/redis-client.js';
+import 'dotenv/config';
+
+const ALLOWED_ROLES = process.env['ALLOWED_ROLES'];
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load(event) {
@@ -44,6 +47,18 @@ export const actions = {
 			logger.info(`🔑 Authenticating ${entry.username} ...`);
 			const user = await pbAdmin.collection('users').authWithPassword(username, password);
 			const authData = { ...user.record, token: user.token, browserSessionToken };
+			// Check if user is allowed
+			if (!ALLOWED_ROLES.includes(authData.role)) {
+				const error = 'User not allowed!';
+				addToStream('login-error', browserSessionToken, {
+					error,
+					username: entry.username
+				});
+				return fail(400, {
+					error: 'Failed to authenticate.',
+					username: entry.username
+				});
+			}
 			await createSession(authData, cookies);
 			addToStream('login-success', browserSessionToken, {
 				appUserId: authData.id
