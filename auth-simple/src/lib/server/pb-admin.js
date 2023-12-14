@@ -25,7 +25,7 @@ if (POCKETBASE_ADMIN === undefined || POCKETBASE_PASSWORD === undefined) {
 			);
 			//  check every hour if token is still valid
 			setInterval(() => {
-				logger.info('🔑 Checking PocketBase admin token...');
+				// logger.info('🔑 Checking PocketBase admin token...');
 				if (!pb.authStore.isValid) {
 					logger.info('🔑 PocketBase admin token expired. Re-authenticating...');
 					pb.admins.authWithPassword(POCKETBASE_ADMIN, POCKETBASE_PASSWORD);

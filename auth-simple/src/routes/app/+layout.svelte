@@ -26,7 +26,10 @@
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
 				<a class="btn btn-sm variant-ghost-surface" href="{base}/app/dashboard"> Dashboard </a>
-				<a class="btn btn-sm variant-ghost-surface" href="{base}/app/protected"> Protected </a>
+				<a class="btn btn-sm variant-ghost-surface" href="{base}/app/email"> Email </a>
+				<a class="btn btn-sm variant-ghost-surface" href="{base}/app/session-logs">
+					Session Logs
+				</a>
 				<a class="btn btn-sm variant-ghost-tertiary" href="{base}/app/profile">
 					{data.user?.name}
 				</a>
