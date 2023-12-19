@@ -58,6 +58,27 @@ services:
     env_file:
       - ./.env
 
+  global-state:
+    build:
+      context: ./global-state
+      dockerfile: Dockerfile.dev
+    command: ["npm", "run", "dev", "--", "--host"]
+    container_name: global-state
+    environment:
+      - NODE_ENV=development
+      - SERVICE_NAME=global-state
+      - OTP_ENABLED=false
+      - OTP_APP_NAME=NELREINATECH
+      - OTP_SESSION_EXPIRED=3600
+    volumes:
+      - ./global-state/src:/appsrc/src
+      - ./global-state/static:/appsrc/static
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.global-state.rule=Host("app.global-state.localhost")
+    env_file:
+      - ./.env
+
 networks:
   default:
     name: traefik
