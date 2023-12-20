@@ -25,7 +25,8 @@ services:
       - OTP_ENABLED=false
       - OTP_APP_NAME=NELREINATECH
       - OTP_SESSION_EXPIRED=3600
-      - TRANSLATION_ENABLED=false
+      - PUBLIC_TRANSLATIONS_ENABLED=false
+      - PUBLIC_APP_TITLE=nelreina.tech
       - ALLOWED_ROLES=ADMIN
     volumes:
       - ./auth-simple/src:/appsrc/src
