@@ -13,6 +13,9 @@
 	import { storePopup } from '@skeletonlabs/skeleton';
 	import AppTitle from '../../lib/components/AppTitle.svelte';
 	import { createPbRealtimeDataStore } from '$lib/stores/pb-store-context.js';
+	import { getToastStore } from '@skeletonlabs/skeleton';
+
+	const toastStore = getToastStore();
 
 	const drawerStore = getDrawerStore();
 	export let data;
@@ -25,7 +28,14 @@
 	const user = data.user;
 	const sessions = data.sessions;
 
-	const logs = createPbRealtimeDataStore(sessions, 'app_sessions', user);
+	const toastMessages = {
+		create: {
+			message: 'New event logged in session:',
+			field: 'event'
+		}
+	};
+
+	const logs = createPbRealtimeDataStore(sessions, 'app_sessions', user, toastStore, toastMessages);
 
 	const mainNav = [
 		{
@@ -41,7 +51,7 @@
 	];
 </script>
 
-<Toast />
+<Toast position="t" />
 
 <Drawer>
 	<div class="flex justify-between items-center p-4">

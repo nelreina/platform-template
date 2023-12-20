@@ -3,7 +3,7 @@ import { pb } from '$lib/pocketbase';
 import { browser } from '$app/environment';
 import { setContext } from 'svelte';
 
-export const createPbRealtimeDataStore = (data, collection, user) => {
+export const createPbRealtimeDataStore = (data, collection, user, toastStore, toastMessage) => {
 	const recordId = 'id';
 	let state;
 	if (!browser) {
@@ -20,12 +20,24 @@ export const createPbRealtimeDataStore = (data, collection, user) => {
 			return session;
 		});
 
+	const notify = (action, record) => {
+		let message = `${action} ${collection} ${record[recordId]}`;
+		if (!toastStore) return;
+		if (toastMessage) {
+			message = toastMessage[action].message;
+			if (toastMessage[action].field) {
+				message += ` ${record[toastMessage[action].field]}`;
+			}
+		}
+		toastStore.trigger({ message, timeout: 7000, background: 'variant-glass-secondary' });
+	};
+
 	state = readable(data, (set) => {
 		let sessions = data;
 		pb.authStore.save(user.token, user);
 		pb.collection(collection).subscribe('*', async (coll) => {
 			const { action, record } = coll;
-			console.log('LOG:  ~ file: pb-store-context.js:28 ~ pb.collection ~ action:', action);
+			notify(action, record);
 			switch (action) {
 				case 'create':
 					sessions = [{ ...record, highlight: true }, ...sessions];
