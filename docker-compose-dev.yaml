@@ -45,6 +45,7 @@ services:
     container_name: testapp
     environment:
       - NODE_ENV=development
+      - PUBLIC_TRANSLATIONS_ENABLED=false
       - SERVICE_NAME=testapp
       - OTP_ENABLED=false
       - OTP_APP_NAME=NELREINATECH

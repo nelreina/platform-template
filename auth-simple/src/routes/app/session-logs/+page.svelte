@@ -1,10 +1,7 @@
 <script>
-	export let data;
-	const user = data.user;
-	const sessions = data.sessions;
-	import { getPbRealtimeDataStore } from '$lib/stores/pb-store';
+	import { getContext } from 'svelte';
 
-	let rt_sessions = getPbRealtimeDataStore(sessions, 'app_sessions', user);
+	let rt_sessions = getContext('app_sessions');
 </script>
 
 <div class="flex">

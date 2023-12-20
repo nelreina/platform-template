@@ -9,9 +9,23 @@
 		LightSwitch
 	} from '@skeletonlabs/skeleton';
 	import { base } from '$app/paths';
+	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
+	import { storePopup } from '@skeletonlabs/skeleton';
+	import AppTitle from '../../lib/components/AppTitle.svelte';
+	import { createPbRealtimeDataStore } from '$lib/stores/pb-store-context.js';
 
 	const drawerStore = getDrawerStore();
 	export let data;
+
+	const drawerOpen = () => {
+		drawerStore.open({});
+	};
+	// Floating UI for Popups
+	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
+	const user = data.user;
+	const sessions = data.sessions;
+
+	const logs = createPbRealtimeDataStore(sessions, 'app_sessions', user);
 
 	const mainNav = [
 		{
@@ -23,22 +37,8 @@
 			name: 'Email',
 			href: `${base}/app/email`,
 			icon: 'email'
-		},
-		{
-			name: 'Logs',
-			href: `${base}/app/session-logs`,
-			icon: 'session'
 		}
 	];
-
-	const drawerOpen = () => {
-		drawerStore.open({});
-	};
-	// Floating UI for Popups
-	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
-	import { storePopup } from '@skeletonlabs/skeleton';
-	import AppTitle from '../../lib/components/AppTitle.svelte';
-	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 </script>
 
 <Toast />
@@ -58,8 +58,20 @@
 			>
 				{nav.name}
 			</a>
-			<!-- content here -->
 		{/each}
+		<div class="relative inline-block w-full">
+			<span class="hidden badge-icon variant-filled-primary absolute -right-0 z-10"
+				>{$logs.length}</span
+			>
+			<a
+				class="btn btn-lg variant-outline-secondary dark:variant-ghost-surface w-full"
+				href="{base}/app/session-logs"
+				on:click={() => drawerStore.close()}
+			>
+				Logs &nbsp; <span class="badge variant-filled-primary">{$logs.length}</span>
+			</a>
+		</div>
+
 		<a
 			class="btn btn-lg variant-ghost-tertiary rounded-none w-full"
 			href="{base}/app/profile"
@@ -96,8 +108,19 @@
 							>
 								{nav.name}
 							</a>
-							<!-- content here -->
 						{/each}
+						<div class="relative inline-block">
+							<span class="badge-icon variant-filled-primary absolute -top-2 -right-0 z-10"
+								>{$logs.length}</span
+							>
+							<a
+								class="btn btn-sm variant-outline-secondary dark:variant-ghost-surface"
+								href="{base}/app/session-logs"
+							>
+								Logs
+							</a>
+						</div>
+
 						<a class="btn btn-sm rounded-none variant-ghost-tertiary" href="{base}/app/profile">
 							{data.user?.name}
 						</a>
