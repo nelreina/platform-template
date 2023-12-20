@@ -1,5 +1,5 @@
 {
-  "name": "",
+  "name": "test_app",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -38,6 +38,7 @@
   },
   "type": "module",
   "dependencies": {
-    "@floating-ui/dom": "1.5.3"
+    "@floating-ui/dom": "1.5.3",
+    "uuid": "^9.0.1"
   }
 }

@@ -38,6 +38,9 @@
         <a class="btn btn-sm variant-ghost-surface" href="{base}/app/protected">
           Protected
         </a>
+        <a class="btn btn-sm variant-ghost-surface" href="{base}/app/upload">
+          Upload
+        </a>
         <a class="btn btn-sm variant-ghost-surface" href="{base}/app/preview/1">
           Preview
         </a>
