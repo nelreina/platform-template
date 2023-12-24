@@ -60,6 +60,14 @@ try {
       logger.info(msg);
       msg = await EventStream(
         client,
+        STREAM + ":sessions",
+        SERVICE,
+        false,
+        handler
+      );
+      logger.info(msg);
+      msg = await EventStream(
+        client,
         "paperless-server:stream",
         SERVICE,
         false,

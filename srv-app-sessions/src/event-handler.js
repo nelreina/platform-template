@@ -6,7 +6,9 @@ import ip3country from "ip3country";
 ip3country.init();
 
 export const handler = async (stream) => {
-  const { streamId, aggregateId, event, payload } = stream;
+  const { streamId, aggregateId, event, payload, serviceName } = stream;
+  // logger.info(JSON.stringify({ ...stream }));
+  logger.info(JSON.stringify({ serviceName, event, aggregateId }));
   const browserSessionToken = aggregateId;
   const data = {
     event,
@@ -36,8 +38,7 @@ export const handler = async (stream) => {
     data.username = user.username;
   }
 
-  await pbAdmin.collection("app_sessions").create(data);
-
-  logger.info(JSON.stringify({ event, aggregateId, payload }));
+  const record = await pbAdmin.collection("app_sessions").create(data);
+  logger.info(JSON.stringify({ record }));
   stream.ack(streamId);
 };

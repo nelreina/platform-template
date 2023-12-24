@@ -4,8 +4,8 @@ import { base } from '$app/paths';
 import { pbAdmin } from '$lib/server/pb-admin';
 import logger from '$lib/server/logger';
 import { fail } from '@sveltejs/kit';
-import { addToStream } from '$lib/server/redis-client.js';
 import 'dotenv/config';
+import { addToSessionStream } from '$lib/server/sessions';
 
 const ALLOWED_ROLES = process.env['ALLOWED_ROLES'];
 
@@ -31,7 +31,7 @@ export const actions = {
 		const { browserSessionToken } = entry;
 		if (!entry.username || !entry.password) {
 			const error = 'Username and Password are required!';
-			addToStream('login-error', browserSessionToken, {
+			addToSessionStream('login-error', browserSessionToken, {
 				error,
 				username: entry.username
 			});
@@ -50,7 +50,7 @@ export const actions = {
 			// Check if user is allowed
 			if (!ALLOWED_ROLES.includes(authData.role)) {
 				const error = 'User not allowed!';
-				addToStream('login-error', browserSessionToken, {
+				addToSessionStream('login-error', browserSessionToken, {
 					error,
 					username: entry.username
 				});
@@ -60,13 +60,13 @@ export const actions = {
 				});
 			}
 			await createSession(authData, cookies);
-			addToStream('login-success', browserSessionToken, {
+			addToSessionStream('login-success', browserSessionToken, {
 				appUserId: authData.id
 			});
 			logger.info(`✅ User authenticated: ${entry.username}`);
 		} catch (error) {
 			logger.error(`❗️ User authentication failed: ${entry.username}`);
-			addToStream('login-error', browserSessionToken, {
+			addToSessionStream('login-error', browserSessionToken, {
 				error: error.message,
 				username: entry.username
 			});

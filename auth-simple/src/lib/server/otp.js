@@ -1,4 +1,4 @@
-import { addToStream, client as redis } from './redis-client.js';
+import { client as redis } from './redis-client.js';
 import { redirect, fail } from '@sveltejs/kit';
 import { redirect as flash_redirect } from 'sveltekit-flash-message/server';
 
@@ -6,7 +6,8 @@ import { authenticator } from 'otplib';
 import QRCode from 'qrcode';
 
 import { base } from '$app/paths';
-import { getToken, saveSession } from './sessions.js';
+import { addToSessionStream, getToken, saveSession } from './sessions.js';
+
 const OTP_ENABLED = process.env['OTP_ENABLED'];
 const OTP_APP_NAME = process.env['OTP_APP_NAME'];
 const OTP_SESSION_EXPIRED = process.env['OTP_SESSION_EXPIRED'];
@@ -69,13 +70,13 @@ export const checkAuthCode = async ({ locals, request, cookies }) => {
 		redis.set(`active:otp:session:${token}`, JSON.stringify({ ...user, otp: true }));
 		redis.expire(`active:otp:session:${token}`, OTP_SESSION_EXPIRED);
 		await saveSession(token, { ...user, otp: true });
-		addToStream('otp-success', browserSessionToken, {
+		addToSessionStream('otp-success', browserSessionToken, {
 			appUserId: user.id,
 			page: page || 'otp-secret'
 		});
 		throw redirect(303, `${base}/app/dashboard`);
 	} else {
-		addToStream('otp-error', browserSessionToken, {
+		addToSessionStream('otp-error', browserSessionToken, {
 			error: 'Invalid code! Please try again.',
 			page: page || 'otp-secret',
 			appUserId: user.id

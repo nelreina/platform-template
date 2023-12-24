@@ -1,7 +1,12 @@
 import { client as redis } from './redis-client.js';
 import { redirect } from '@sveltejs/kit';
+import { addToEventLog } from '@nelreina/redis-stream-consumer';
 
 import { base } from '$app/paths';
+
+const STREAM = process.env['STREAM'];
+const SERVICE = process.env['SERVICE_NAME'] || 'unknown';
+
 const SESSION_EXPIRED = process.env['SESSION_EXPIRED'];
 const cookieName = 'auth';
 
@@ -56,4 +61,15 @@ export const getSessionUser = async (cookies) => {
 		return;
 	}
 	return { token, user: JSON.parse(user) };
+};
+
+export const addToSessionStream = async (event, aggregateId, payload) => {
+	const streamData = {
+		streamKeyName: `${STREAM}:sessions`,
+		aggregateId,
+		payload,
+		event: `${event}`,
+		serviceName: SERVICE
+	};
+	await addToEventLog(redis, streamData);
 };
