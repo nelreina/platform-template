@@ -1,9 +1,11 @@
 <script>
   export let form;
   import { enhance } from "$app/forms";
+  import { RadioGroup, RadioItem } from "@skeletonlabs/skeleton";
 
   let preview;
   let extension;
+  let document_type;
 
   const showUploadPreview = (e) => {
     const file = e.target.files[0];
@@ -59,6 +61,17 @@
         placeholder="Weight"
         step="0.1"
       />
+      <div class="div">
+        <input type="hidden" name="document_type" bind:value={document_type} />
+        <RadioGroup>
+          <RadioItem bind:group={document_type} name="justify" value={1}
+            >Package</RadioItem
+          >
+          <RadioItem bind:group={document_type} name="justify" value={2}
+            >Invoice</RadioItem
+          >
+        </RadioGroup>
+      </div>
       <input
         class="btn variant-filled-primary"
         type="submit"

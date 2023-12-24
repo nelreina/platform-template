@@ -7,6 +7,7 @@ import { pbAdmin } from "./config/pocketbase.js";
 import logger from "./config/logger.js";
 import { handler } from "./event-handler.js";
 import { SERVICE } from "./config/constants.js";
+import { document_handler } from "./paperless-handler.js";
 
 const STREAM = process.env["STREAM"];
 const POCKETBASE_ADMIN = process.env["POCKETBASE_ADMIN"];
@@ -55,7 +56,16 @@ try {
       process.exit(1);
     } else {
       logger.info("✅ STREAM: " + STREAM);
-      const msg = await EventStream(client, STREAM, SERVICE, false, handler);
+      let msg = await EventStream(client, STREAM, SERVICE, false, handler);
+      logger.info(msg);
+      msg = await EventStream(
+        client,
+        "paperless-server:stream",
+        SERVICE,
+        false,
+        document_handler,
+        "0"
+      );
       logger.info(msg);
     }
 

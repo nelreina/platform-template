@@ -74,8 +74,8 @@ export async function uploadDocument(formData, fetch, additionalFields = []) {
         Authorization: `Token ${PAPERLESS_API_KEY}`,
       },
     });
-    const taskId = await res.json();
-    redisData["taskId"] = taskId;
+    const paperlessTask = await res.json();
+    redisData["paperlessTask"] = paperlessTask;
     const redisValue = JSON.stringify(redisData);
     await redis.set(redisKey, redisValue);
     return reference;

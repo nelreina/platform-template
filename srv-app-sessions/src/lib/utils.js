@@ -1,3 +1,17 @@
+import Fuse from "fuse.js";
+
+export function fuzzySearch(list, field, query) {
+  const options = {
+    includeScore: true,
+    keys: [field],
+  };
+
+  const fuse = new Fuse(list, options);
+  const result = fuse.search(query);
+
+  return result.filter((item) => item.score < 0.4).slice(0, 3);
+}
+
 export function getBrowserName(userAgent) {
   // Convert user agent string to lowercase for case-insensitive matching
   const userAgentLowerCase = userAgent.toLowerCase();
