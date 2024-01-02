@@ -5,6 +5,7 @@
 	import { onMount } from 'svelte';
 	export let token;
 	export let userId;
+	import { base } from '$app/paths';
 
 	onMount(async () => {
 		// if (!browser) return;
@@ -16,7 +17,7 @@
 			info.token = token;
 			info.appUserId = userId;
 			// POST request to /api/gather-info
-			fetch('/api/info/gather-info', {
+			fetch(`${base}/api/info/gather-info`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'

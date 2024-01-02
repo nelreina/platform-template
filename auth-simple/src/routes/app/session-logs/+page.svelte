@@ -25,7 +25,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{#each $rt_sessions as row, i}
+			{#each $rt_sessions as row (row.id)}
 				<tr class:table-row-checked={row.highlight === true}>
 					<td class="no-wrap">{row.created}</td>
 					<td class="ellipsis">{row.browserSessionToken}</td>
