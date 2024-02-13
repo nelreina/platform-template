@@ -1,6 +1,6 @@
 <script>
 	export let action = 'create';
-	export let postAction = () => {};
+	export let postAction = async () => {};
 	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
 </script>
@@ -12,8 +12,10 @@
 	use:enhance={() => {
 		return async ({ result }) => {
 			if (result) {
-				await postAction(result);
-				await invalidateAll();
+				const ret = await postAction(result);
+				if (ret) {
+					await invalidateAll();
+				}
 			}
 		};
 	}}

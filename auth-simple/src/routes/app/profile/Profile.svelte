@@ -4,17 +4,15 @@
 
 	export let user = {};
 	export let browserSessionToken = '';
-	export let changingPassword = false;
 	let form;
 
 	const postAction = async (result) => {
 		if (result.type === 'failure') {
 			form = { error: result.data.error };
-			// return false;
+			return false;
 		} else {
 			form = { success: result.data.success };
-			changingPassword = false;
-			// return true;
+			return true;
 		}
 	};
 </script>
