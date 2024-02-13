@@ -8,6 +8,7 @@ import logger from "./config/logger.js";
 import { handler } from "./event-handler.js";
 import { SERVICE } from "./config/constants.js";
 import { document_handler } from "./paperless-handler.js";
+import UsersCollection from "./lib/UsersCollection.js";
 
 const STREAM = process.env["STREAM"];
 const POCKETBASE_ADMIN = process.env["POCKETBASE_ADMIN"];
@@ -76,6 +77,8 @@ try {
       );
       logger.info(msg);
     }
+    const usersCollection = UsersCollection();
+    await usersCollection.subscribe();
 
     process.on("SIGINT", shutdown);
     process.on("SIGTERM", shutdown);

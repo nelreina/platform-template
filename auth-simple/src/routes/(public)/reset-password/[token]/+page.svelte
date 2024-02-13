@@ -18,7 +18,7 @@
 	</div>
 
 	<h2 class="text-4xl font-semibold mb-6 text-center text-tertiary-200">
-		{$i18n.t('Reset your password')}
+		{$i18n.t('Reset password')}
 	</h2>
 
 	{#if form?.error}
@@ -31,16 +31,20 @@
 	<LanguagesButtons />
 	<form method="post" use:enhance class="space-y-2">
 		<input type="hidden" name="browserSessionToken" value={browserSessionToken} />
-		<div>
-			<input
-				type="email"
-				id="email"
-				name="email"
-				placeholder={$i18n.t('email')}
-				required
-				class="w-full input px-3 py-2 border border-gray-300 rounded-md"
-			/>
-		</div>
+		<input
+			type="password"
+			name="password"
+			placeholder={$i18n.t('New Password')}
+			required
+			class="w-full input px-3 py-2 border border-gray-300 rounded-md"
+		/>
+		<input
+			type="password"
+			name="confirmPassword"
+			placeholder={$i18n.t('Confirm New Password')}
+			required
+			class="w-full input px-3 py-2 border border-gray-300 rounded-md"
+		/>
 
 		<div class="flex items-center justify-between">
 			<button type="submit" class="btn variant-filled-primary px-4 py-2 w-full rounded-md">
@@ -50,7 +54,7 @@
 	</form>
 	<div>
 		<a href="{base}/login" class="btn variant-ringed-secondary rounded-md w-full"
-			>{$i18n.t('I remember now :)')}</a
+			>{$i18n.t('Back to login')}</a
 		>
 	</div>
 </div>

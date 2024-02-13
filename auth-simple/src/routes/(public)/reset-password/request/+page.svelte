@@ -8,10 +8,9 @@
 
 	export let data;
 	const browserSessionToken = data.browserSessionToken;
-	// import { base } from '$app/paths'
 </script>
 
-<div class="card variant-glass-surface p-10 rounded-md shadow-md w-full sm:w-96 space-y-2">
+<div class="card variant-glass-surface p-10 rounded-md shadow-md w-full sm:w-96 space-y-3">
 	<div class="flex justify-center">
 		<a href="/">
 			<img src="{base}/logo.png" alt="" class="w-44 h-44 rounded" />
@@ -19,7 +18,7 @@
 	</div>
 
 	<h2 class="text-4xl font-semibold mb-6 text-center text-tertiary-200">
-		{$i18n.t('Enter Credentials')}
+		{$i18n.t('Reset password request')}
 	</h2>
 
 	{#if form?.error}
@@ -30,43 +29,28 @@
 		</div>
 	{/if}
 	<LanguagesButtons />
-	<form method="post" class="space-y-2" use:enhance>
-		<div>
-			<input type="hidden" name="browserSessionToken" value={browserSessionToken} />
-			<input
-				type="text"
-				id="username"
-				name="username"
-				placeholder={$i18n.t('Username or Email')}
-				value={form?.username ?? ''}
-				class="w-full input px-3 py-2 border border-gray-300 rounded-md"
-			/>
-		</div>
-
+	<form method="post" use:enhance class="space-y-2">
+		<input type="hidden" name="browserSessionToken" value={browserSessionToken} />
 		<div>
 			<input
-				type="password"
-				id="password"
-				name="password"
-				placeholder={$i18n.t('Password')}
+				type="email"
+				id="email"
+				name="email"
+				placeholder={$i18n.t('email')}
+				required
 				class="w-full input px-3 py-2 border border-gray-300 rounded-md"
 			/>
 		</div>
 
 		<div class="flex items-center justify-between">
 			<button type="submit" class="btn variant-filled-primary px-4 py-2 w-full rounded-md">
-				{$i18n.t('Login')}
+				{$i18n.t('Reset Password')}
 			</button>
 		</div>
 	</form>
 	<div>
-		<a href="{base}/register" class="btn variant-ringed-secondary rounded-md w-full"
-			>{$i18n.t('I do not have account yet')}</a
-		>
-	</div>
-	<div>
-		<a href="{base}/reset-password/request" class="btn variant-ringed-secondary rounded-md w-full"
-			>{$i18n.t('Forgot your password?')}</a
+		<a href="{base}/login" class="btn variant-ringed-secondary rounded-md w-full"
+			>{$i18n.t('I remember now :)')}</a
 		>
 	</div>
 </div>
