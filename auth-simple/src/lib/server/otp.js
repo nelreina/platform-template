@@ -14,6 +14,7 @@ const OTP_SESSION_EXPIRED = process.env['OTP_SESSION_EXPIRED'];
 
 export const checkOtp = async (user, token, event) => {
 	if (OTP_ENABLED === 'true') {
+		if (!user.verified) return;
 		if (await redis.exists(`user:${user.id}:otp-secret`)) {
 			// Check if user as
 			if (!(await redis.exists(`active:otp:session:${token}`))) {

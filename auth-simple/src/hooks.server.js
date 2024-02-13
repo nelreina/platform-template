@@ -12,7 +12,7 @@ export const handle = async ({ event, resolve }) => {
 	const { user, token } = session || {};
 	event.locals.user = user;
 	if (event.url.pathname.startsWith(`${base}/app`)) {
-		if (!user) {
+		if (!user || !user.verified) {
 			throw redirect(303, `${base}/login`);
 		} else {
 			if (user.browserSessionToken) {

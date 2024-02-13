@@ -30,8 +30,26 @@ export const actions = {
 		const formData = await request.formData();
 		const entry = Object.fromEntries(formData);
 		const { browserSessionToken } = entry;
-		if (!entry.username || !entry.password) {
-			const error = 'Username and Password are required!';
+
+		if (
+			!entry.username ||
+			!entry.password ||
+			!entry.email ||
+			!entry.password ||
+			!entry.passwordConfirm
+		) {
+			const error = 'All fields are required!';
+			addToSessionStream('login-error', browserSessionToken, {
+				error,
+				username: entry.username
+			});
+			return fail(400, {
+				error,
+				username: entry.username
+			});
+		}
+		if (entry.password !== entry.passwordConfirm) {
+			const error = 'Password and Confirm Password must be equal!';
 			addToSessionStream('login-error', browserSessionToken, {
 				error,
 				username: entry.username
@@ -42,13 +60,28 @@ export const actions = {
 			});
 		}
 
-		const { username, password } = entry;
+		const { username, password, email, passwordConfirm } = entry;
 		let authData;
 		// Login the user
 		try {
-			logger.info(`🔑 Authenticating ${entry.username} ...`);
-			const user = await pbAdmin.collection('users').authWithPassword(username, password);
-			authData = { ...user.record, token: user.token, browserSessionToken };
+			logger.info(`🔑 Register ${entry.username} ...`);
+			// example create data
+			const data = {
+				username,
+				email,
+				emailVisibility: true,
+				password,
+				passwordConfirm,
+				name: username,
+				role: 'ADMIN'
+			};
+
+			const record = await pbAdmin.collection('users').create(data);
+
+			// (optional) send an email verification request
+			await pbAdmin.collection('users').requestVerification(email);
+
+			authData = { ...record, browserSessionToken };
 		} catch (error) {
 			logger.error(`❗️ User authentication failed: ${entry.username}`);
 			addToSessionStream('login-error', browserSessionToken, {
@@ -61,43 +94,15 @@ export const actions = {
 			});
 		}
 
-		// Check if user is allowed
-		if (!ALLOWED_ROLES.includes(authData.role)) {
-			const error = 'User not allowed!';
-			addToSessionStream('login-error', browserSessionToken, {
-				error,
-				username: entry.username
-			});
-			return fail(400, {
-				error: 'Failed to authenticate.',
-				username: entry.username
-			});
-		}
-
-		// Check if user has verified their email
-		if (!authData.verified) {
-			const error = 'Email not verified!';
-			// save email temporarily in redis
-			await redis.set(`unverified-email:${authData.id}`, authData.email);
-			event.locals.unverifiedUser = authData.id;
-
-			addToSessionStream('login-error', browserSessionToken, {
-				error,
-				username: entry.username
-			});
-			await createSession(authData, cookies, true);
-			throw redirect(303, `${base}/verify-email`, null, event);
-		}
-
-		await createSession(authData, cookies);
+		await createSession({ email }, cookies, true);
 		addToSessionStream('login-success', browserSessionToken, {
 			appUserId: authData.id
 		});
-		logger.info(`✅ User authenticated: ${entry.username}`);
+		logger.info(`✅ User registered: ${entry.username}`);
 
 		// Generate random token
 
-		const message = { type: 'success', message: 'Sign in successful!' };
-		throw redirect(303, `${base}/app/dashboard`, message, event);
+		const message = { type: 'success', message: 'Register successful!' };
+		throw redirect(303, `${base}/verify-email`, message, event);
 	}
 };
