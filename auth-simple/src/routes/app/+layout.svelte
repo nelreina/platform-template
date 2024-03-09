@@ -44,6 +44,11 @@
 			icon: 'home'
 		},
 		{
+			name: 'Report',
+			href: `${base}/app/report`,
+			icon: 'home'
+		},
+		{
 			name: 'Email',
 			href: `${base}/app/email`,
 			icon: 'email'
